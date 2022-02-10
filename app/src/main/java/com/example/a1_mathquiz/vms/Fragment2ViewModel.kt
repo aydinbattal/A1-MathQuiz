@@ -12,22 +12,27 @@ import kotlin.random.Random
  * student ID : 991521740
  * on 2022-02-07 */
 class Fragment2ViewModel(difficulty: DifficultyMode): ViewModel() {
-    var questionsList:MutableList<Question> = MutableList(3){ currentQuestion!! }
+    var questionsList:MutableList<Question> = mutableListOf()
     var isQuizOver = MutableLiveData<Boolean>(false)
     var currentQuestion:Question? = null
     var score:Int = 0
-    var difficultyLevel = difficulty
     var index = 0
+
+    var difficultyLevel: DifficultyMode? = null
+
+    init {
+        difficultyLevel = difficulty
+        generateQuestions()
+    }
 
     fun generateQuestions(){
         val a = Random.nextInt(1, 10)
         val b = Random.nextInt(1, 10)
 
         if(difficultyLevel == DifficultyMode.EASY){
-            val answer = a * b
+            val answer = a + b
             val wrongAnswer = Random.nextInt(answer-3, answer-1)
-            //todo:make appearance of answers random
-            currentQuestion = Question("What is $a+$b?",answer,listOf(answer,wrongAnswer))
+            currentQuestion = Question("What is $a+$b?",answer,listOf(answer,wrongAnswer).shuffled())
             questionsList.add(index, currentQuestion!!)
             index += 1
         } else if(difficultyLevel == DifficultyMode.CHALLENGE){
