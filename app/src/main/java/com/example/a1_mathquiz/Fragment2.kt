@@ -36,11 +36,15 @@ class Fragment2 : Fragment(R.layout.fragment_2) {
         binding.btnAnswer1.setOnClickListener{
             Log.d("ABC", "Received answer 1: ${binding.btnAnswer1.text.toString()}")
             model.updateGame(binding.btnAnswer1.text.toString())
+            displayScoreUI(binding)
+            displayQuestionUI(binding)
         }
 
         binding.btnAnswer2.setOnClickListener{
             Log.d("ABC", "Received answer 2: ${binding.btnAnswer2.text.toString()}")
             model.updateGame(binding.btnAnswer2.text.toString())
+            displayScoreUI(binding)
+            displayQuestionUI(binding)
         }
 
         binding.btnStartOver.setOnClickListener{
@@ -49,19 +53,13 @@ class Fragment2 : Fragment(R.layout.fragment_2) {
 
         binding.swtTurnOnHints.setOnCheckedChangeListener { _, isChecked ->
             // do whatever you need to do when the switch is toggled here
-            if (isChecked){
-                binding.txtHint.isVisible = true
-                binding.txtHint.text = "Correct answer is ${model.currentQuestion?.answer.toString()}"
-            } else {
-                binding.txtHint.isVisible = false
-            }
+            binding.txtHint.isVisible = isChecked
 
         }
 
         Log.d("ABC", "Received difficulty mode: ${args.difficultyMode}")
 
-        //displayScoreUI(binding)
-        model.generateQuestions()
+        displayScoreUI(binding)
         displayQuestionUI(binding)
 
     }
@@ -77,5 +75,6 @@ class Fragment2 : Fragment(R.layout.fragment_2) {
         binding.txtQuestion.text = model.currentQuestion?.questionText
         binding.btnAnswer1.text = model.currentQuestion?.choices?.first().toString()
         binding.btnAnswer2.text = model.currentQuestion?.choices?.last().toString()
+        binding.txtHint.text = "Correct answer is ${model.currentQuestion?.answer.toString()}"
     }
 }
